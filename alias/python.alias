@@ -1,0 +1,7 @@
+## PYTHON ALIASES
+
+alias p="python3"
+alias penv="virtualenv -p python3"
+
+alias pvinstall="pip install -r requirements.txt"
+alias pvfreeze="pip freeze > requirements.txt"

@@ -1,0 +1,11 @@
+## COMPRESS MP4
+
+function lcompmp4() {
+	ffmpeg -i $1 -vcodec h264 -acodec mp2 $2
+}
+
+## GENERATE THUMBNAIL FROM VIDEO
+
+function lthumb() {
+	ffmpeg -i $1 -r 1 -t 00:00:01 -frames 1 thumbnail.jpg
+}

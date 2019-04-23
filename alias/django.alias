@@ -1,0 +1,8 @@
+alias dmigrate="python3 manage.py makemigrations && python3 manage.py migrate"
+alias dflush="python3 "
+
+function dmigraterefresh() {
+	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find . -path "*/migrations/*.pyc"  -delete
+	pip install --upgrade --force-reinstall Django
+}

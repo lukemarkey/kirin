@@ -1,0 +1,17 @@
+## UNIX ALISES
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"
+
+alias grep="grep --color"
+alias ll="ls -lhA --color $*"
+alias c="clear"
+alias t="touch"
+alias h="cd ~/"
+
+alias lbashe="subl ~/.bash_profile"
+alias lbashu="source ~/toolbox/bin/toolbox && source ~/.bash_profile"
+alias lsnippets="subl ~/.config/sublime-text-3/Packages/User/snippets"
+alias path='echo -e ${PATH//:/\\n}'

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+## LINUX FILES
+BASHRC="${HOME}"/.bashrc
+BASH_PROFILE="${HOME}"/.bash_profile
+BASH_ALIASES="${HOME}"/.bash_aliases
+
+## KIRIN DIRECTORIES
+KIRIN_ALIASES="${HOME}"/toolbox/alias
+
+## IF BASH ALIASES DOES NOT EXIST THEN CREATE NEW FILE
+if [[ ! -e ${BASH_ALIASES} ]]; then
+	touch ${BASH_ALIASES}
+fi
+
+## PURGE LOCAL BASH ALIASES
+echo -e "#!/bin/bash\n" > ${BASH_ALIASES}
+
+## WRITE ALIASES TO BASH ALIASES
+for file in ${KIRIN_ALIASES}/* ; do
+  cat "${file}" >> ${BASH_ALIASES}
+done ;
+
+## SOURCE BASHRC FILE TO REFRESH SHELL
+. ${BASHRC}

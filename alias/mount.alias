@@ -1,0 +1,12 @@
+## MOUNT REMOTE DIRECTORY TO LOCALHOST
+## 1: ABSOLUTE PATH FOR REMOTE DIRECTORY
+## 2: ABSOLUTE PATH FOR LOCAL DIRECTORY
+function mount() {
+	sshfs $1 $2 -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3
+}
+
+## UNMOUNT
+## 1: ABSOLUTE PATH FOR MOUNT DIRECTORY
+function unmount() {
+	fusermount -uz $1
+}

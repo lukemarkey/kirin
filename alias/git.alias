@@ -1,0 +1,35 @@
+## CREATE NEW PRIVATE BITBUCKET REPOSITORY
+## 1: USERNAME (firstname-lastname)
+## 2: PROJECT (website)
+function lgnew() {
+  curl -X POST --user $1 https://api.bitbucket.org/2.0/repositories/$1/$2 --data is_private=true
+}
+
+## ADD PRIVATE BITBUCKET REPOSITORY AS GIT REMOTE
+## 1: USERNAME (firstname-lastname)
+## 2: PROJECT (website)
+function lgremote() {
+  git remote add origin git@bitbucket.org:$1/$2.git
+}
+
+## ADD CHANGES, COMMIT & PUSH TO PRIVATE REPOSITORY
+## 1: COMMIT MESSAGE
+function lgpush() {
+    git add .
+    git commit -a -m "$1"
+    git push -u origin master
+}
+
+## CLONE PRIVATE BITBUCKET REPOSITORY
+## 1: USERNAME (firstname-lastname)
+## 2: PROJECT (website)
+function lgclone() {
+  git clone git@bitbucket.org:$1/$2
+}
+
+## ADD GITHUB REPOSITORY AS GIT REMOTE
+## 1: USERNAME (firstname)
+## 2: REPOSITORY (website)
+function lgitremote() {
+	git remote add origin git@github.com:$1/$2.git
+}
