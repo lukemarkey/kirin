@@ -6,7 +6,7 @@ BASH_PROFILE="${HOME}"/.bash_profile
 BASH_ALIASES="${HOME}"/.bash_aliases
 
 ## KIRIN DIRECTORIES
-KIRIN_ALIASES="${HOME}"/toolbox/alias
+KIRIN_ALIASES="${HOME}"/kirin/alias
 
 ## IF BASH ALIASES DOES NOT EXIST THEN CREATE NEW FILE
 if [[ ! -e ${BASH_ALIASES} ]]; then
