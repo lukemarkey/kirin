@@ -1,0 +1,516 @@
+#!/bin/bash
+
+# THESE VARIABLES WILL BE LOADED INTO LOCAL BASH PROFILE
+
+# ANSI COLOR ESCAPE CODES
+declare -A c ;
+c[red]='\033[0;31m' ; # ERROR
+c[yellow]='\033[0;33m' ; # IN PROCESS
+c[green]='\033[0;32m' ; # SUCCESS
+c[purple]='\033[0;35m' ; # NETWORK
+c[blue]='\033[0;34m' ; # EXECUTABLE
+c[cyan]='\033[36m' ; # EVENT
+c[nc]='\033[0m' ; # RESET COLOR
+export c ;
+
+# AWS IP KEY VALUES
+declare -A aws ;
+aws[keystroke]=54.165.203.102 ;
+aws[previews]=52.23.192.189 ;
+aws[lsi]=52.0.25.73 ;
+aws[herobox]=54.89.79.218 ;
+aws[hirejo]=54.172.167.146 ;
+aws[datahuman]=54.224.155.1 ;
+export a ;
+
+# SCRIPTS WRITTEN HERE WILL BE EXECUTED BY BASH PROFILE FIRST
+
+# SET SCRIPT OPTIONS
+# shopt -s dotglob
+
+# RUN EVAL ON SSH-AGENT AND ADD KEY(S)
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+    echo -e "${c[purple]}NETWORK: Pairing Session ID with SSH Agent"
+    echo -e "${c[yellow]}"
+    eval `ssh-agent -s`
+    ssh-add
+fi
+
+# DETECT OS (OS X, LINUX OR WINDOWS)
+uname=$(uname -s)
+case "$uname" in
+    Darwin )
+        OS="osx"
+        ST_DIR="$HOME/Library/Application Support/Sublime Text 3/Packages/User"
+        echo -e \\n"${c[cyan]}EVENT: Found MAC OS ${c[nc]}"\\n
+        echo -e "${c[yellow]}OS = $OS ${c[nc]}"
+        echo -e "${c[yellow]}ST_DIR = $ST_DIR ${c[nc]}"
+        ;;
+    *Linux* )
+        OS="linux"
+        ST_DIR="$HOME/.config/sublime-text-3/Packages/User"
+        echo -e \\n"${c[cyan]}EVENT: Found Linux OS ${c[nc]}"\\n
+        echo -e "${c[yellow]}OS = $OS ${c[nc]}"
+        echo -e "${c[yellow]}ST_DIR = $ST_DIR ${c[nc]}"
+        ;;
+    *MINGW32_NT*|*MINGW64_NT* )
+        OS="win"
+        ST_DIR="$HOME/AppData/Roaming/Sublime Text 3/Packages/User"
+        NPM_DIR="$HOME/AppData/Roaming/npm/node_modules/npm"
+        CMDER_DIR="/c/cmder"
+        echo -e \\n"${c[cyan]}EVENT: Found Windows OS ${c[nc]}"\\n
+        echo -e "${c[yellow]}OS = $OS ${c[nc]}"
+        echo -e "${c[yellow]}ST_DIR = $ST_DIR ${c[nc]}"
+        echo -e "${c[yellow]}NPM_DIR = $NPM_DIR ${c[nc]}"
+        echo -e "${c[yellow]}CMDER_DIR = $CMDER_DIR ${c[nc]}"
+        ;;
+    * )
+        echo -e "\\n${c[red]}ERROR: Could not detect Operating System. ${c[nc]}\\n"
+        exit 2
+        ;;
+esac
+printf "\n"
+
+# IDENTIFY AND SOURCE BINARY PATHS HERE. WILL APPEND TO END OF LOCAL BASH PROFILE
+
+if [[ ":${PATH}:" == *":${HOME}/.dotfiles/bin/:"* ]] ; then
+  echo -e "${c[cyan]}EVENT: Journeyman Binaries Detected in Local Path${c[nc]}" ;
+else
+  PATH="${HOME}"/.dotfiles/bin/:$PATH ;
+  echo -e "${c[green]}SUCCESS: Journeyman Binaries Added to Local Path${c[nc]}" ;
+fi
+
+if [[ ":${PATH}:" == *":${HOME}/.dotfiles/package/bin/:"* ]] ; then
+  echo -e "${c[cyan]}EVENT: Package Binaries Detected in Local Path${c[nc]}" ;
+else
+  PATH="${HOME}"/.dotfiles/package/bin/:$PATH ;
+  echo -e "${c[green]}SUCCESS: Package Binaries Added to Local Path${c[nc]}" ;
+fi
+
+if [[ ":${PATH}:" == *":${HOME}/local/bin/:"* ]] ; then
+  echo -e "${c[cyan]}EVENT: Local Bin Added to Path${c[nc]}" ;
+else
+  PATH="${HOME}"/local/bin/:$PATH ;
+  echo -e "${c[green]}SUCCESS: Local Bin Added to Path${c[nc]}" ;
+fi
+alias bsync="browser-sync start --server --port 3001 --files='./*'"
+## PHP ARTISAN ALIASES
+
+alias pa="php artisan"
+alias pak="php artisan key:generate"
+alias par="php artisan route:list"
+alias pav="php artisan vendor:publish"
+alias pam="php artisan migrate"
+alias pamrs="php artisan migrate:refresh --seed"
+alias paroute="php artisan route:clear && php artisan route:scan && php artisan route:list"
+
+## PHP ARTISAN FUNCTIONS
+
+function pamig() {
+    php artisan make:migration create_$1_table --create=$1
+}
+
+function pamod() {
+    php artisan make:model Entities/$1
+}
+
+function paseed() {
+    php artisan make:seeder $1TableSeeder
+}
+
+function pacon() {
+    php artisan make:controller $1Controller
+}
+
+function papol() {
+    php artisan make:policy $1Policy
+}
+# ANSIBLE VAULT ALIASES
+
+## FIRST ARGUMENT: FILES TO BE DECRYPTED
+function vopen() {
+
+  NUMARGS=$#
+  DEFAULT_KEY_DIR="${HOME}"/.dotfiles/key
+  DEFAULT_VAULT_PASS="${HOME}"/.dotfiles/key/.vault_pass
+  DEFAULT_TARGET=accounts.key
+
+  if [[ ${NUMARGS} == 0 ]] ; then
+    echo -e "${c[yellow]}Targeting Journeyman's Account Keyfile ${c[nc]}"
+    ansible-vault decrypt "${DEFAULT_KEY_DIR}/${DEFAULT_TARGET}" --vault-password-file "${DEFAULT_VAULT_PASS}"
+  else
+    TARGET="$1"
+    echo -e "${c[yellow]}Targeting "${DEFAULT_KEY_DIR}/${TARGET}" ${c[nc]}"
+    ansible-vault decrypt "${DEFAULT_KEY_DIR}/${TARGET}" --vault-password-file "${DEFAULT_VAULT_PASS}"
+  fi
+
+
+}
+
+## FIRST ARGUMENT: FILES TO BE ENCRYPTED
+function vclose() {
+
+  NUMARGS=$#
+  DEFAULT_KEY_DIR="${HOME}"/.dotfiles/key
+  DEFAULT_VAULT_PASS="${HOME}"/.dotfiles/key/.vault_pass
+  DEFAULT_TARGET=accounts.key
+
+  if [[ ${NUMARGS} == 0 ]] ; then
+    echo -e "${c[yellow]}Targeting Journeyman's Account Keyfile ${c[nc]}"
+    ansible-vault encrypt "${DEFAULT_KEY_DIR}/${DEFAULT_TARGET}" --vault-password-file "${DEFAULT_VAULT_PASS}"
+  else
+    TARGET="$1"
+    echo -e "${c[yellow]}Targeting "${DEFAULT_KEY_DIR}/${TARGET}" ${c[nc]}"
+    ansible-vault encrypt "${DEFAULT_KEY_DIR}/${TARGET}" --vault-password-file "${DEFAULT_VAULT_PASS}"
+  fi
+
+}
+# GIT ALIASES
+alias lgs="git status"
+
+# CREATE NEW PRIVATE REPOSITORY
+function lgnew() {
+  curl -X POST --user luke-markey https://api.bitbucket.org/2.0/repositories/luke-markey/$1 --data is_private=true
+}
+
+# ADD CHANGES, COMMIT & PUSH TO PRIVATE REPOSITORY
+function lgpush() {
+    git add .
+    git commit -a -m "$1"
+    git push -u origin master
+}
+
+# CLONE PRIVATE REPOSITORY
+function lgclone() {
+  git clone git@bitbucket.org:luke-markey/$1
+}
+
+# ADD PRIVATE REPOSITORY AS GIT REMOTE
+function lgremote() {
+  git remote add origin git@bitbucket.org:luke-markey/$1.git
+}
+
+# GET JOURNEYMAN
+function jpull() {
+    cd "${HOME}"
+    git clone git@bitbucket.org:luke-markey/journeyman.git .dotfiles
+    cd ~/.dotfiles/bin && chmod +x * && source ./journeyman
+    source ~/.bash_profile
+}
+
+# PUSH JOURNEYMAN
+function jpush() {
+    cd "${HOME}"/.dotfiles
+    git add --all
+    git commit -m "Journeyman Push"
+    git push -u origin master
+}
+alias lnew="composer create-project laravel/laravel"
+
+alias hstead="cd /c/homestead && vagrant"
+# PHP HOST ALIASES
+alias kphpcgi="php-cgi -b 127.0.0.1:9000"
+alias kphphost="php -S localhost:9080"
+
+# COMPOSER ALIASES
+alias ci="composer install"
+alias cu="composer update"
+alias cr="composer require"
+alias cda="composer dumpautoload -o"
+alias ccc="composer clearcache"
+alias cnew="rm -rf composer.lock && composer install"
+
+# COMPOSER REQUIRE FROM WPACKAGIST
+function crwp() {
+  composer require --no-update wpackagist-plugin/$1
+}
+# COMPOSER REQUIRE FROM WPMUDEV
+function cwpmu() {
+  composer require --no-update wpmudev/$1
+}
+
+# COMPOSER REMOVE FROM WPACKAGIST
+function rmwp() {
+  composer remove wpackagist-plugin/$1
+}
+
+
+alias p="python3"
+
+alias p3env="virtualenv -p python3"
+
+function wpstage() {
+    scp ~/.bash_profile wpstage:/tmp/.bash_temp
+    ssh -t wpstage "bash --rcfile /tmp/.bash_temp ; rm /tmp/.bash_temp"
+}
+
+function builder() {
+    scp ~/.bash_profile builder:/tmp/.bash_temp
+    ssh -t builder "bash --rcfile /tmp/.bash_temp ; rm /tmp/.bash_temp"
+}
+
+# SYNC LOCALHOST MYSQL TO STAGING ENVIRONMENT
+# FIRST ARGUMENT :: TARGET DATABASE TO EXPORT
+function kwpsyncdb() {
+
+    if [[ -r $(pwd)/.syncdb ]] ; then
+        source .syncdb
+        echo -e \\n"${c[green]}SUCCESS: Project DB Sync Dotfile Sourced ${c[nc]}"\\n
+    else
+        echo -e "${c[red]}ERROR: No Config File in Local Path${c[nc]}"\\n
+        return
+    fi
+
+    # TODO : ALLOW FOR NON WINDOWS TO RUN
+    if [[ -r /c/my.cnf ]] ; then
+        echo -e "${c[green]}SUCCESS: Local MYSQL Configuration File Found${c[nc]}"\\n
+    else
+        echo -e "${c[red]}ERROR: Configuration File Not Found${c[nc]}"\\n
+        return
+    fi
+
+    # CHECK TO SEE IF DATABASE EXISTS IN LOCALHOST
+    LOCAL_DB_EXISTS=$(mysqlshow ${local_database}| grep -v Wildcard | grep -o ${local_database})
+
+    if [ "$LOCAL_DB_EXISTS" == ${local_database} ]; then
+        echo -e "${c[green]}SUCCESS: Database Found${c[nc]}"\\n
+    else
+        echo -e "${c[red]}Database Not Found${c[nc]}"\\n
+        return
+    fi
+
+    # TODO : ALLOW FOR NON WINDOWS TO RUN
+    mysqldump "${local_database}" > "${HOME}"/database.sql
+    echo -e "${c[green]}SUCCESS: Local Database Backed Up to ${HOME}/database.sql${c[nc]}"\\n
+
+    # SEND DATABASE BACKUP TO STAGING ENVIRONMENT
+    # TODO :: SETUP VARIABLE DESTINATIONS
+    scp ${HOME}/database.sql ${SERVER_USER}@${IP_ADDRESS}:/home/${SERVER_USER}/database.sql
+    echo -e "${c[green]}SUCCESS: Local Database Ported to Staging Server${c[nc]}"\\n
+
+    # SSH INTO STAGING ENVIRONEMENT AND COPY DATABASE
+    # TODO :: RUN MYSQL FROM CONFIGURATION FILE
+    ssh ${SERVER_USER}@${IP_ADDRESS} << HERE
+        echo "drop database IF EXISTS $remote_database" | mysql --user="$remote_database_login" --password="$remote_database_password"
+        echo -e "${c[green]}SUCCESS: Staging Database Dropped${c[nc]}"
+        echo "create database IF NOT EXISTS $remote_database" | mysql --user="$remote_database_login" --password="$remote_database_password"
+        echo -e "${c[green]}SUCCESS: Empty Staging Database Created${c[nc]}"
+        mysql --user="$remote_database_login" --password="$remote_database_password" "$remote_database" < /home/${SERVER_USER}/database.sql
+        echo -e "${c[green]}SUCCESS: Staging Database Populated from Local Export${c[nc]}"
+        cd "$remote_path" && wp search-replace "$local_hostname" "$remote_hostname"
+        echo -e "${c[green]}SUCCESS: Local Hostname replaced by Remote Hostname${c[nc]}"
+HERE
+
+    echo -e "${c[green]}SUCCESS: Database Sync Complated${c[nc]}"
+
+}
+# RAM DIAGNOSTICS
+alias meminfo='free -m -l -t'
+
+# LIST TOP 10 PROCESSES BY RAM CONSUMPTION
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+# LIST TOP 10 PROCESSES BY CPU CONSUMPTION
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+# SEARCH PROCESS BY NAME AND HIGHLIGHT
+function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
+
+# GET SERVER CPU INFORMATION
+alias cpuinfo='lscpu'
+
+# GET DISK USAGE OF CURRENT DIRECTORY
+alias du1='du -h -d 1'
+
+# #####################################################################
+# ALIASES FOR MOVING BETWEEN UBUNTU / WINDOWS LOCALHOST
+# #####################################################################
+
+## SYNC WINDOWS JOURNEYMAN WITH UBUNTU LOCALHOST
+function kubjourneyman() {
+    rsync -avz --exclude='.git/' "${LUKEPC}"/.dotfiles/ "${HOME}"/.dotfiles/ ;
+}
+
+# SETUP TRELLIS WITH ANSIBLE PLAYBOOKS
+# FIRST ARGUMENT :: BASENAME OF PROJECT & TRELLIS (e.g. keystroke/keystroke-trellis :: keystroke)
+function kubtrellis() {
+
+    # IF NO ARGUMENTS PASSED : TARGET CURRENT DIRECTORY
+    if [[ $# == 0 ]] ; then
+        TARGET_DIR="$(pwd)"
+        echo -e "${c[yellow]}TARGET DIRECTORY: ${TARGET_DIR} ${c[nc]}"
+    else
+        TARGET_DIR=/mnt/c/src/$1
+        echo -e "${c[yellow]}TARGET DIRECTORY: ${TARGET_DIR} ${c[nc]}"
+    fi
+
+    cd "${TARGET_DIR}" && ansible-galaxy install -r requirements.yml
+
+}
+
+# TODO :: PASS DIRECTORY ARGUMENT
+function kublock() {
+    #echo -e "lukehm\$8020" > .vault_pass && chmod 600 .vault_pass &&
+    ansible-vault --ask-vault-pass encrypt group_vars/all/vault.yml group_vars/development/vault.yml group_vars/staging/vault.yml group_vars/production/vault.yml
+}
+# NAVIGATION
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"
+
+# BASIC OPERATIONS
+alias grep="grep --color"
+alias ll="ls -lhA --color $*"
+alias c="clear"
+alias t="touch"
+alias h="cd ~/"
+
+# PATH AND SOURCE
+alias lbashe="subl ~/.bash_profile"
+alias lbashu="source ~/.dotfiles/bin/journeyman && source ~/.bash_profile"
+alias lhoste="subl /c/Windows/System32/drivers/etc/hosts"
+alias path='echo -e ${PATH//:/\\n}'
+
+######################################################################
+# UTILITY FUNCTIONS - USEFUL BASH OPERATIONS
+######################################################################
+
+# ::BOOLEAN : VERIFY IF A DIRECTORY EXISTS
+function KDIR_EXISTS() {
+  if [ -d "$(pwd)/$1" ] ; then
+    echo -e "${c[red]}ERROR: DIRECTORY ALREADY EXISTS ${c[nc]}" ; exit 1 ;
+  fi
+}
+
+# ::PATH : ABSOLUTE PATH OF SCRIPT PARENT DIRECTORY
+function KFILE_PATH() {
+  echo -e "${c[green]}SUCCESS: KFILE_PATH Called ${c[nc]}"
+}
+
+# ::INDEX : LIST ALL FILES IN A DIRECTORY
+function KINDEX_DIR() {
+  ## DECLARE ARGUMENT COUNT & TARGET DIRECTORY
+  NUMARGS=$# ; DIRECTORY='' ;
+  echo -e "${c[yellow]}NUMARGS : ${NUMARGS} ${c[nc]}"
+  echo -e "${c[yellow]}DIRECTORY : ${DIRECTORY} ${c[nc]}"
+  # IF NO ARGUMENTS PASSED : TARGET CURRENT DIRECTORY
+  if [[ ${NUMARGS} == 0 ]] ; then
+    "${DIRECTORY}"="$(pwd)"
+  else
+    "${DIRECTORY}"="$1"
+  fi
+  # INDEX DIRECTORY
+  echo -e "${c[cyan]}EVENT: INDEXING ${DIRECTORY} ${c[nc]}"
+  for file in ${DIRECTORY}/* ; do
+    echo -e "${c[yellow]}PROCESS: Indexed ${file} ${c[nc]}" ;
+  done ; echo -e "${c[green]}SUCCESS: Sourced Aliases ${c[nc]}" ;
+}
+
+# CHECK IF COMMAND EXISTS IN SHELL
+function kcommand_exists() {
+    type "$1" &> /dev/null ;
+}
+
+
+alias vpn=". ~/vpn/run tui"
+
+# WORDPRESS GIT CLONE ALIASES
+alias kgettrellis="git clone --depth=1 git@github.com:roots/trellis.git && rm -rf trellis/.git"
+alias kgetbedrock="git clone --depth=1 git@github.com:roots/bedrock.git site && rm -rf site/.git"
+
+# SATIS ALIASES
+alias satbuild="php bin/satis build satis.json --no-interaction web/"
+
+# TRELLIS ALIASES
+function wpvlock() {
+    ansible-vault encrypt group_vars/all/vault.yml --vault-password-file .vault_pass
+    ansible-vault encrypt group_vars/development/vault.yml --vault-password-file .vault_pass
+    ansible-vault encrypt group_vars/staging/vault.yml --vault-password-file .vault_pass
+    ansible-vault encrypt group_vars/production/vault.yml --vault-password-file .vault_pass
+}
+
+function wpvunlock() {
+    ansible-vault decrypt group_vars/all/vault.yml --vault-password-file .vault_pass
+    ansible-vault decrypt group_vars/development/vault.yml --vault-password-file .vault_pass
+    ansible-vault decrypt group_vars/staging/vault.yml --vault-password-file .vault_pass
+    ansible-vault decrypt group_vars/production/vault.yml --vault-password-file .vault_pass
+}
+
+# TRELLIS DEPLOY TARGET SITE
+function deploy() {
+  ansible-playbook deploy.yml -e "site=$1 env=$2"
+}
+
+# TRELLIS PROVISION TARGET SERVER
+function provision() {
+  ansible-playbook server.yml -e env="$1"
+}
+
+# WORDPRESS PLUGIN GENERATOR
+function kplugin() {
+  git clone --depth=1 git@github.com:DevinVinson/WordPress-Plugin-Boilerplate.git "$1"
+  mv "$1"/plugin-name/ kwp-"$1"/ && mv "$1"/.gitignore kwp-"$1"/.gitignore && rm -rf "${1:/dev/null}"/
+  cd kwp-"$1" && mv plugin-name.php "$1".php && subl .
+}
+
+# WORDPRESS INSTALL SAGE INTO PROJECT
+function ksage() {
+    # ASK USER FOR PROJECT NAME
+    read -p 'WHAT DO YOU WANT TO NAME YOUR THEME FOLDER?: ' DIR_THEME ;
+    composer create-project roots/sage "${DIR_PROJECT}" --no-install && cd "${DIR_PROJECT}" ;
+}
+
+# SYNC LOCALHOST MYSQL TO STAGING ENVIRONMENT
+# FIRST ARGUMENT :: TARGET DATABASE TO EXPORT
+function kwpsyncdb() {
+
+    if [[ -r $(pwd)/.syncdb ]] ; then
+        source .syncdb
+        echo -e \\n"${c[green]}SUCCESS: Project DB Sync Dotfile Sourced ${c[nc]}"\\n
+    else
+        echo -e "${c[red]}ERROR: No Config File in Local Path${c[nc]}"\\n
+        return
+    fi
+
+    # TODO : ALLOW FOR NON WINDOWS TO RUN
+    if [[ -r /c/my.cnf ]] ; then
+        echo -e "${c[green]}SUCCESS: Local MYSQL Configuration File Found${c[nc]}"\\n
+    else
+        echo -e "${c[red]}ERROR: Configuration File Not Found${c[nc]}"\\n
+        return
+    fi
+
+    # CHECK TO SEE IF DATABASE EXISTS IN LOCALHOST
+    LOCAL_DB_EXISTS=$(mysqlshow ${local_database}| grep -v Wildcard | grep -o ${local_database})
+
+    if [ "$LOCAL_DB_EXISTS" == ${local_database} ]; then
+        echo -e "${c[green]}SUCCESS: Database Found${c[nc]}"\\n
+    else
+        echo -e "${c[red]}Database Not Found${c[nc]}"\\n
+        return
+    fi
+
+    # TODO : ALLOW FOR NON WINDOWS TO RUN
+    mysqldump "${local_database}" > "${HOME}"/database.sql
+    echo -e "${c[green]}SUCCESS: Local Database Backed Up to ${HOME}/database.sql${c[nc]}"\\n
+
+    # SEND DATABASE BACKUP TO STAGING ENVIRONMENT
+    # TODO :: SETUP VARIABLE DESTINATIONS
+    scp ${HOME}/database.sql ${SERVER_USER}@${IP_ADDRESS}:/home/${SERVER_USER}/database.sql
+    echo -e "${c[green]}SUCCESS: Local Database Ported to Staging Server${c[nc]}"\\n
+
+    # SSH INTO STAGING ENVIRONEMENT AND COPY DATABASE
+    # TODO :: RUN MYSQL FROM CONFIGURATION FILE
+    ssh ${SERVER_USER}@${IP_ADDRESS} << HERE
+        echo "drop database IF EXISTS $remote_database" | mysql --user="$remote_database_login" --password="$remote_database_password"
+        echo -e "${c[green]}SUCCESS: Staging Database Dropped${c[nc]}"
+        echo "create database IF NOT EXISTS $remote_database" | mysql --user="$remote_database_login" --password="$remote_database_password"
+        echo -e "${c[green]}SUCCESS: Empty Staging Database Created${c[nc]}"
+        mysql --user="$remote_database_login" --password="$remote_database_password" "$remote_database" < /home/${SERVER_USER}/database.sql
+        echo -e "${c[green]}SUCCESS: Staging Database Populated from Local Export${c[nc]}"
+        cd "$remote_path" && wp search-replace "$local_hostname" "$remote_hostname"
+        echo -e "${c[green]}SUCCESS: Local Hostname replaced by Remote Hostname${c[nc]}"
+HERE
+
+    echo -e "${c[green]}SUCCESS: Database Sync Complated${c[nc]}"
+
+}

@@ -1,0 +1,5 @@
+## TUNNEL REMOTE POSTGRES TO LOCALHOST
+
+function sshpostgres() {
+	ssh -L 2222:localhost:5432 $1
+}
