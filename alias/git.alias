@@ -26,6 +26,12 @@ function lgremote() {
 	git remote add origin https://github.com/$1/$2.git
 }
 
+## GITHUB PULL
+## $1: REPOSITORY (website)
+function lggclone() {
+	git clone https://github.com/lukemarkey/$1
+}
+
 ## ADD CHANGES, COMMIT & PUSH TO PRIVATE REPOSITORY
 ## 1: COMMIT MESSAGE
 function lpush() {
