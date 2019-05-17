@@ -12,14 +12,17 @@ alias t="touch"
 alias h="cd ~/"
 
 alias lbashe="subl ~/.bash_profile"
-alias lsnippits="subl ~/.config/sublime-text-3/Packages/User/snippets"
-alias lkirine="subl ~/kirin"
-alias lcodeboxe="subl ~/codebox"
-
 alias lbashu="source ~/toolbox/bin/toolbox && source ~/.bash_profile"
 
+alias codebox-sublime="subl ~/codebox"
+alias codebox-push="cd ~/codebox && lpush \"update\""
+
+alias kirin-sublime="subl ~/kirin"
 alias kirin-refresh=". ~/kirin/bin/kirin"
 alias kirin-push="cd ~/kirin && lpush \"update\""
+
+alias snippet-sublime="subl ~/.config/sublime-text-3/Packages/User/snippets"
+alias snippet-push="cd ~/.config/sublime-text-3/Packages/User/snippets && lpush \"update\""
 
 alias path='echo -e ${PATH//:/\\n}'
 
