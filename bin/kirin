@@ -24,7 +24,7 @@ for file in ${KIRIN_ALIASES}/* ; do
 done ;
 
 ## ADD KIRIN BIN DIRECTORY TO PATH
- if [[ ":$PATH:" != *":${KIRIN_BIN}:"* ]]; then
+if [[ ":$PATH:" != *":${KIRIN_BIN}:"* ]]; then
 	echo -e "\nPATH="${PATH:+"$PATH:"}${KIRIN_BIN}"\n" >> ${BASHRC}
 fi
 
