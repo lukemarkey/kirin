@@ -20,10 +20,9 @@ function lbclone() {
 }
 
 ## ADD GITHUB REPOSITORY AS GIT REMOTE
-## 1: USERNAME (firstname)
-## 2: REPOSITORY (website)
+## 1: REPOSITORY (website)
 function lgremote() {
-	git remote add origin https://github.com/$1/$2.git
+	git remote add origin https://github.com/lukemarkey/$1.git
 }
 
 ## GITHUB PULL

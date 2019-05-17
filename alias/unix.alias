@@ -12,6 +12,21 @@ alias t="touch"
 alias h="cd ~/"
 
 alias lbashe="subl ~/.bash_profile"
+alias lsnippits="subl ~/.config/sublime-text-3/Packages/User/snippets"
+alias lkirine="subl ~/kirin"
+alias lcodeboxe="subl ~/codebox"
+
 alias lbashu="source ~/toolbox/bin/toolbox && source ~/.bash_profile"
-alias lsnippets="subl ~/.config/sublime-text-3/Packages/User/snippets"
+
+alias kirin-refresh=". ~/kirin/bin/kirin"
+alias kirin-push="cd ~/kirin && lpush \"update\""
+
 alias path='echo -e ${PATH//:/\\n}'
+
+###########################################################################
+## DISK SPACE / RAM
+###########################################################################
+
+alias ldisksystem="df -h"
+alias ldisktotal="du -h"
+alias ldiskhere="du -h -d 1"
