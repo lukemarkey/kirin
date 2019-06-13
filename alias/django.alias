@@ -1,8 +1,14 @@
-alias dmigrate="python3 manage.py makemigrations && python3 manage.py migrate"
-alias dflush="python3 "
+alias django-migrate="python3 manage.py makemigrations && python3 manage.py migrate"
+alias django-flush="python3 manage.py flush --no-input"
 
-function dmigraterefresh() {
+function django-migrate-refresh() {
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/*.pyc"  -delete
 	pip install --upgrade --force-reinstall Django
+}
+
+function django-push() {
+	pip freeze > requirements.txt
+	sed '/^pkg-resources==0.0.0/d' requirements.txt
+	lpush "update"
 }
