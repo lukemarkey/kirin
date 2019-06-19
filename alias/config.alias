@@ -2,8 +2,8 @@
 ## CUSTOM SYSTEM CONFIGURATIONS
 ###########################################################################
 
-alias lbashe="subl ~/.bash_profile"
-alias lbashu="source ~/toolbox/bin/toolbox && source ~/.bash_profile"
+alias lbashe="subl ~/.bashrc"
+alias lbashu="source ~/kirin/bin/kirin && source ~/.bashrc"
 
 alias codebox-sublime="subl ~/codebox"
 alias codebox-push="cd ~/codebox && lpush \"update\""

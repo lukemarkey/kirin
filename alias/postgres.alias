@@ -3,3 +3,36 @@
 function sshpostgres() {
 	ssh -L 2222:localhost:5432 $1
 }
+
+function -psql-backup-remote() {
+	ssh $1 "pg_dump -U $2 $3 -f $3.backup.sql"
+	scp $1:$3.backup.sql $3.backup.sql
+}
+
+function -psql-rds-migrate() {
+	psql --host=djangodb.c7fgpafxpkvc.us-east-1.rds.amazonaws.com \
+	--port=5432 \
+	--username=luke \
+	--dbname=$1 \
+	--file=$2
+}
+
+function -psql-restore-rds() {
+	psql --host=djangodb.c7fgpafxpkvc.us-east-1.rds.amazonaws.com \
+	--port=5432 \
+	--username=luke \
+	--dbname=portfolio
+	--command="BEGIN; DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO luke; GRANT ALL ON SCHEMA public TO public; END;"
+
+	psql -h djangodb.c7fgpafxpkvc.us-east-1.rds.amazonaws.com \
+	-U luke \
+	-d portfolio
+	-f portfolio.backup.sql
+}
+
+function -psql-connect-djangodb() {
+	psql --host=djangodb.c7fgpafxpkvc.us-east-1.rds.amazonaws.com \
+	--port=5432 \
+	--username=luke \
+	--dbname=postgres
+}

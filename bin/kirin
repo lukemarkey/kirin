@@ -10,6 +10,11 @@ KIRIN_HOME="${HOME}"/kirin
 KIRIN_BIN=${HOME}/kirin/bin
 KIRIN_ALIASES="${HOME}"/kirin/alias
 
+## CODEBOX DIRECTORIES
+CODEBOX_HOME="${HOME}"/codebox
+CODEBOX_BIN=${HOME}/codebox/bin
+CODEBOX_BASH="${HOME}"/codebox/bash
+
 ## IF BASH ALIASES DOES NOT EXIST THEN CREATE NEW FILE
 if [[ ! -e ${BASH_ALIASES} ]]; then
 	touch ${BASH_ALIASES}
@@ -26,6 +31,11 @@ done ;
 ## ADD KIRIN BIN DIRECTORY TO PATH
 if [[ ":$PATH:" != *":${KIRIN_BIN}:"* ]]; then
 	echo -e "\nPATH="${PATH:+"$PATH:"}${KIRIN_BIN}"\n" >> ${BASHRC}
+fi
+
+## ADD CODEBOX BASH DIRECTORY TO PATH
+if [[ ":$PATH:" != *":${CODEBOX_BASH}:"* ]]; then
+	echo -e "\nPATH="${PATH:+"$PATH:"}${CODEBOX_BASH}"\n" >> ${BASHRC}
 fi
 
 ## SOURCE BASHRC FILE TO REFRESH SHELL (DOESNT WORK FOR CURRENT TERMINAL)
