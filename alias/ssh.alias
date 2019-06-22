@@ -1,0 +1,4 @@
+function -codebox-bash-refresh() {
+	scp /home/luke/codebox/bash/$1 \
+	django:/home/luke/codebox/bash/$1
+}

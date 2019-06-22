@@ -2,7 +2,12 @@
 ## UBUNTU ALIAS
 ###########################################################################
 
-alias tarx="tar -czvf"
+alias tar-compress="tar -czvf"
+alias tar-open="tar -xvf"
+
+## PACKAGE MANAGEMENT
+
+alias -apt-installed="sudo apt list --installed"
 
 ## UNIX ALISES
 
