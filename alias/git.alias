@@ -38,3 +38,7 @@ function lpush() {
     git commit -a -m "$1"
     git push -u origin master
 }
+
+function -sync-github() {
+
+}
