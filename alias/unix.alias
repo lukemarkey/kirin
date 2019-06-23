@@ -5,6 +5,8 @@
 alias tar-compress="tar -czvf"
 alias tar-open="tar -xvf"
 
+alias passwd-openssl="sudo sh -c \"openssl passwd -apr1 >> /etc/nginx/.htpasswd.netdata\""
+
 ## PACKAGE MANAGEMENT
 
 alias apt-installed="sudo apt list --installed"
