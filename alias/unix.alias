@@ -31,3 +31,4 @@ alias path='echo -e ${PATH//:/\\n}'
 alias ldisksystem="df -h"
 alias ldisktotal="du -h"
 alias ldiskhere="du -h -d 1"
+alias llistram="free -m"
