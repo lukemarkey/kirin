@@ -40,5 +40,5 @@ function lpush() {
 }
 
 function -sync-github() {
-
+	git pull
 }
