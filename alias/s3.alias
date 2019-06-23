@@ -1,7 +1,0 @@
-# function -s3push() {
-# 	if [ $# -eq 1 ]
-# 	then
-# 		## BASE64MD5=`/usr/bin/openssl md5 -binary /home/luke/backup/${1}.gz | base64`
-# 		## /usr/bin/s3cmd --add-header="content-md5: ${BASE64MD5}" put ${BACKUP_DIRECTORY}/${BACKUP_FILE}.gz ${DESTINATION}/${BACKUP_FILE}/${BACKUP_FILE}-${TIMESTAMP}
-# 	fi
-# }

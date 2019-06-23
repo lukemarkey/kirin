@@ -2,3 +2,19 @@ function -codebox-bash-refresh() {
 	scp /home/luke/codebox/bash/$1 \
 	django:/home/luke/codebox/bash/$1
 }
+
+function -ssh-list-public() {
+	echo
+	echo "office: id_rsa.pub"
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvwlGODP3NIY0YoLSUurXlPM2OCq0HomMI8fSDVEvEcwLwf4jwzhWjXR+jgbK3tGWzpNXwcMN05DU4+8YdltTDkN4nSVSfxr4TiDXSggvntkCuYPRdTjCMEs24RD+tscGhHtL2LHg1hjgakWsCSBpuEGGCjaBs2Tq+aJ0SE4etgkV3pPuqn/oEDXKGLi2IgvTy59nzgm+UukIZPPOvO17uBreP8DhDG4UH3I0A8SfsWH7dSboSiTHuqbA3yDhyGkVVlhd57GuuplaUKZ5bcpSrNEE8PjGO0H0/ZSF5oPf1PexIG2CIOBe41Xm3+MEe29gahsbDRvtBYfnpFTXwNqsd luke@luke"
+	echo
+	echo "django: django.pub"
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSsykpzznmgLO51+OKnBGjep5+6nO40nJAndwIUFD/BYD7tx/urCnzdEuBgTfB//YLgqHeLOKx/W/aKx/oMwzrL8Vb4Qkm4peiqbvPI11mwK8TiMcUCS5T2BTwqYyO92Ghd5vTwcoTDFubs+2WhJ9SUdMJYBR4YtKif58AG972M8PbxjgVd5bRWzxQXcONHackhjvvAC2ebOqn0kKaQJ5SH+oru+I5LQzxwOQScA6eCwsDd+n87/Er5Xk5rHpRXY2+0hzlBjoMkc9l0p4YnYOqmUnzhC4R9K9OUB3msPLMGk3FGvss5cIOSUnBkSBOvYp060EdMhcqwBSpRcqTIk3D luke@django"
+	echo
+	echo "wordpress: wordpress.pub"
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDmxWVhb1sdsM4ttp2nbpUkjksXIdD5RZMWpvARWcHtIvEgWE9THeGlRu0Ga0Nxrh25MtMSSbrHa/4rKe+684UbhThpSbMPXokL+VtdY1kvO5uKufrZUZ65GtBOqPPhwhtHxJstKmqZVV/HKaKmby2Z36xMRSKAKqlEfUS2xuBS45pNQKHgRLpQL3AYIQfYQ8FKOJTl680D1r8cafREaudrtKOu1DaA1B5aAvIvFw/BkcQ2bBL/gi1msNXWaIx2RI4CZ7NAIAhX24pyoNcEvcN6/vSm7d8hF5YJt9/8YNLQDnlBOfhMd7SNZtue3pLv0vBTLKuc0STpyUh4F+w6H05R luke@wordpress"
+	echo
+	echo "home: home.pub"
+	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVRCcUmoHRqdnOYsX4Ke3mV5fFs8Qru1+xILyO4zHtu60Lt1Dso7kPVEKUe6QSTHNf25qX8fDfwkNaD8YLYmDqh9tQ1ojVPNJfqSX2p73+z4zSmZ4A43Aa6s5bGQfLd9K1kpsEuEGNJdL+0YXOpfqOTCV/cwXTUGyB2aAXZJ19TEFgOOoxC3QPELbsgivKJCOVdoUw/r2i/JyLKyRaiHZJUXBvFd+9fViyr+s7lFq7osqaZYiNg6QWZgIDCYCZvtpYLJnEsVjZubF9RhlmX4nGBWsmljypQ07eIFbnXUjpOrkqrp/KOjh+QIVpYzGV7BpmDVBawBXBxzqwiVscSnSt luke@home"
+	echo
+}
