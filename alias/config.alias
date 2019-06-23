@@ -20,5 +20,5 @@ function -sync-codebox() {
 	codebox-push
 	kirin-push
 	cd
-
+	ssh django 'cd codebox && git pull'
 }
