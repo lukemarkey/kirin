@@ -16,3 +16,9 @@ alias snippet-clone="cd ~/.config/sublime-text-3/Packages/User && git clone http
 alias snippet-sublime="subl ~/.config/sublime-text-3/Packages/User/snippets"
 alias snippet-push="cd ~/.config/sublime-text-3/Packages/User/snippets && lpush \"update\""
 
+function -sync-codebox() {
+	codebox-push
+	kirin-push
+	cd
+
+}

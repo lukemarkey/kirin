@@ -7,7 +7,7 @@ alias tar-open="tar -xvf"
 
 ## PACKAGE MANAGEMENT
 
-alias -apt-installed="sudo apt list --installed"
+alias apt-installed="sudo apt list --installed"
 
 ## UNIX ALISES
 
