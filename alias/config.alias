@@ -14,6 +14,10 @@ alias kirin-refresh=". ~/kirin/bin/kirin"
 alias kirin-push="cd ~/kirin && lpush \"update\""
 alias kirin-clone="cd && /usr/bin/git clone git@github.com:lukemarkey/kirin.git"
 
+alias note-sublime="subl ~/note"
+alias note-push="cd ~/note && lpush \"update\""
+alias note-clone="cd && /usr/bin/git clone git@github.com:lukemarkey/note.git"
+
 alias snippet-clone="cd ~/.config/sublime-text-3/Packages/User && /usr/bin/git clone git@github.com:lukemarkey/sublime-snippets.git snippets"
 alias snippet-sublime="subl ~/.config/sublime-text-3/Packages/User/snippets"
 alias snippet-push="cd ~/.config/sublime-text-3/Packages/User/snippets && lpush \"update\""

@@ -3,5 +3,5 @@
 alias p="python3"
 alias penv="virtualenv -p python3"
 
-alias pvinstall="pip install -r requirements.txt"
-alias pvfreeze="pip freeze > requirements.txt"
+alias pipinstall="pip install -r requirements.txt"
+alias pipfreeze="pip freeze | grep -v "pkg-resources" > requirements.txt"
